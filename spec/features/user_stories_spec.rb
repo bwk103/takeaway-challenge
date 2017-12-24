@@ -1,6 +1,7 @@
 describe 'User Stories' do
 
-  let(:takeaway) { Takeaway.new }
+  let(:takeaway) { Takeaway.new(menu) }
+  let(:menu) { Menu.new }
 
   #As a customer
   #So that I can check if I want to order something
