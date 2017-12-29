@@ -2,11 +2,12 @@ require 'takeaway'
 
 describe Takeaway do
 
-  let(:takeaway) { described_class.new(menu) }
+  let(:takeaway) { described_class.new(menu, sms) }
   let(:menu_class) { double(:menu_class, :new => menu)}
   let(:menu) { double(:menu, :dishes => [dish, dish2]) }
   let(:dish) { double(:dish, :price => 5.00) }
   let(:dish2) { double(:dish) }
+  let(:sms) { double(:sms_service, :send_message => true) }
 
   context "defaults" do
     it "has an empty order collection" do
@@ -50,10 +51,10 @@ describe Takeaway do
     end
 
     context "when user provides correct total" do
-      it "confirms the order" do
+      it "calls #send_message on the SMS Service" do
         2.times { takeaway.add_to_order(dish) }
-        message = "Thank you! Your order was placed and will be delivered before 18:52"
-        expect(takeaway.confirm_order(10.0)).to eq message
+        expect(sms).to receive(:send_message)
+        takeaway.confirm_order(10.00)
       end
     end
 

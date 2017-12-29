@@ -1,12 +1,15 @@
 require_relative 'menu'
+require_relative 'sms_service'
+require 'dotenv/load'
 
 class Takeaway
 
   attr_reader :order
 
-  def initialize(menu)
+  def initialize(menu, message_service=SMSService.new)
     @menu = menu
     @order = []
+    @message_service = message_service
   end
 
   def view_menu
@@ -24,7 +27,7 @@ class Takeaway
 
   def confirm_order(price)
     fail "I'm sorry, that is not the correct total" if !check_total(price)
-    "Thank you! Your order was placed and will be delivered before 18:52"
+    @message_service.send_message
   end
 
   private
