@@ -1,5 +1,5 @@
+# Contains a collection of dishes for the user to select
 class Menu
-
   attr_reader :dishes
 
   def initialize
@@ -7,8 +7,8 @@ class Menu
   end
 
   def add(dish)
-    fail 'Only dishes can be added to the menu' if !checkDish(dish)
-    fail 'That dish is already on the menu' if checkMenu(dish)
+    raise 'Only dishes can be added to the menu' unless check_dish(dish)
+    raise 'That dish is already on the menu' if check_menu(dish)
     @dishes.push(dish)
   end
 
@@ -22,12 +22,11 @@ class Menu
 
   private
 
-  def checkMenu(dish)
+  def check_menu(dish)
     @dishes.include? dish
   end
 
-  def checkDish(dish)
+  def check_dish(dish)
     dish.is_a? Dish
   end
-
 end

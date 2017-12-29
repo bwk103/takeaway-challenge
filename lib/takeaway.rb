@@ -1,12 +1,11 @@
 require_relative 'menu'
 require_relative 'sms_service'
 require 'dotenv/load'
-
+# Parent class which manages order
 class Takeaway
-
   attr_reader :order
 
-  def initialize(menu, message_service=SMSService.new)
+  def initialize(menu, message_service = SMSService.new)
     @menu = menu
     @order = []
     @message_service = message_service
@@ -21,12 +20,12 @@ class Takeaway
   end
 
   def add_to_order(dish)
-    fail "I'm sorry but you cannot order off menu" if !on_menu?(dish)
+    raise "I'm sorry but you cannot order off menu" unless on_menu?(dish)
     @order.push(dish)
   end
 
   def confirm_order(price)
-    fail "I'm sorry, that is not the correct total" if !check_total(price)
+    raise "I'm sorry, that is not the correct total" unless check_total(price)
     @message_service.send_message
   end
 
@@ -39,5 +38,4 @@ class Takeaway
   def check_total(total)
     total == @order.sum(&:price)
   end
-
 end
