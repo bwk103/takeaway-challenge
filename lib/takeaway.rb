@@ -22,10 +22,19 @@ class Takeaway
     @order.push(dish)
   end
 
+  def confirm_order(price)
+    fail "I'm sorry, that is not the correct total" if !check_total(price)
+    "Thank you! Your order was placed and will be delivered before 18:52"
+  end
+
   private
 
   def on_menu?(dish)
     @menu.dishes.include?(dish)
+  end
+
+  def check_total(total)
+    total == @order.sum(&:price)
   end
 
 end

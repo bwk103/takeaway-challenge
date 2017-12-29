@@ -5,7 +5,7 @@ describe Takeaway do
   let(:takeaway) { described_class.new(menu) }
   let(:menu_class) { double(:menu_class, :new => menu)}
   let(:menu) { double(:menu, :dishes => [dish, dish2]) }
-  let(:dish) { double(:dish) }
+  let(:dish) { double(:dish, :price => 5.00) }
   let(:dish2) { double(:dish) }
 
   context "defaults" do
@@ -42,6 +42,28 @@ describe Takeaway do
       3.times { takeaway.add_to_order(dish) }
       expect(takeaway.view_order).to eq takeaway.order
     end
+  end
 
+  describe "#confirm_order" do
+    it "responds to confirm_order" do
+      expect(takeaway).to respond_to(:confirm_order).with(1).argument
+    end
+
+    context "when user provides correct total" do
+      it "confirms the order" do
+        2.times { takeaway.add_to_order(dish) }
+        message = "Thank you! Your order was placed and will be delivered before 18:52"
+        expect(takeaway.confirm_order(10.0)).to eq message
+      end
+    end
+
+    context "when user provides the incorrect total" do
+
+      it "raises an error" do
+        2.times { takeaway.add_to_order(dish) }
+        message = "I'm sorry, that is not the correct total"
+        expect { takeaway.confirm_order(11.00) }.to raise_error message
+      end
+    end
   end
 end
